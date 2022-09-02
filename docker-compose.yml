@@ -1,0 +1,26 @@
+version: '3.2'
+services:
+  app:
+    build:
+      context: './fe'
+      dockerfile: 'Dockerfile'
+    ports:
+      - '8080:8080'
+    volumes:
+      - './fe:/app'
+  db:
+    image: postgres
+    volumes:
+      - ./be/tmp/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+  api:
+    build:
+      context: './be'
+      dockerfile: 'Dockerfile'
+    volumes:
+      - ./be:/api
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
